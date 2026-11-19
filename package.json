@@ -1,0 +1,7 @@
+{
+  "name": "dhulikhel-citizen-profiling",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": { "dev": "concurrently -k -n api,web -c blue,green \"npm:dev:api\" \"npm:dev:web\"", "dev:api": "npm --prefix Backend run dev", "dev:web": "npm --prefix Frontend run dev", "build": "npm --prefix Frontend run build", "start": "npm --prefix Backend start", "seed": "npm --prefix Backend run seed" },
+  "devDependencies": { "concurrently": "^9.1.2" }
+}

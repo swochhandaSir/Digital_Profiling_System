@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { login, logout, me, refresh } from '../controllers/authController.js';
+import { createCitizen, deleteCitizen, getCitizen, listCitizens, updateCitizen, verifyCitizen } from '../controllers/citizenController.js';
+import { auditLogs, dashboard } from '../controllers/dashboardController.js';
+import { authenticate, allowRoles } from '../middleware/auth.js';
+const router = Router();
+router.post('/auth/login', login); router.post('/auth/refresh', refresh); router.post('/auth/logout', logout); router.get('/auth/me', authenticate, me);
+router.get('/dashboard', authenticate, dashboard);
+router.get('/citizens', authenticate, allowRoles('ADMIN', 'MAYOR', 'WARD_CHAIRPERSON'), listCitizens);
+router.get('/citizens/:id', authenticate, allowRoles('ADMIN', 'MAYOR', 'WARD_CHAIRPERSON'), getCitizen);
+router.post('/citizens', authenticate, allowRoles('ADMIN', 'MAYOR', 'WARD_CHAIRPERSON'), createCitizen);
+router.patch('/citizens/:id', authenticate, allowRoles('WARD_CHAIRPERSON', 'ADMIN'), updateCitizen);
+router.delete('/citizens/:id', authenticate, allowRoles('ADMIN'), deleteCitizen);
+router.post('/citizens/:id/verification', authenticate, allowRoles('ADMIN'), verifyCitizen);
+router.get('/audit-logs', authenticate, allowRoles('ADMIN'), auditLogs);
+export default router;
